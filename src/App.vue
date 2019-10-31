@@ -282,6 +282,16 @@ export default {
                             "[vid = " + item.data.vid + "]",
                             self.nodeClick.bind(self, cy)
                         );
+                        cy.on(
+                            "mouseover",
+                            "[vid = " + item.data.vid + "]",
+                            self.mouseover.bind(self, cy)
+                        );
+                        cy.on(
+                            "mouseout",
+                            "[vid = " + item.data.vid + "]",
+                            self.mouseout.bind(self, cy)
+                        );
                     }
                 }
             });

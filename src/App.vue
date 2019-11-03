@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <div id="cycontainner"></div>
+    <!-- <div id="cycontainner"></div> -->
+    <!-- <input ref="inputA" type="index" v-model="inpuValue" /> -->
+
+    <textarea placeholder="例如select * from table" ref="myCodeMirror"></textarea>
+
     <div class="selectZone">
       <div class="changeColor">
         <div
@@ -29,10 +33,30 @@ import tippy from "tippy.js";
 import "tippy.js/dist/tippy.css";
 import popper from "cytoscape-popper";
 
+/* import { codemirror } from "vue-codemirror";
+import "codemirror/theme/ambiance.css";
+import "codemirror/mode/javascript/javascript"; */
+
+import "codemirror/lib/codemirror.css";
+/* import CodeMirror from "codemirror"; */
+require("codemirror/mode/cypher/cypher");
+const CodeMirror = require("codemirror/lib/codemirror");
+require("codemirror/addon/display/placeholder");
+
 export default {
   name: "app",
+  /*  components: {
+    codemirror
+  }, */
   data() {
     return {
+      /*       curCode: "123",
+      cmOptions: {
+        value: "",
+        mode: "text/javascript",
+        theme: "ambiance",
+        readOnly: true
+      }, */
       cy: null,
       dataSource: [],
       colorList: [
@@ -52,7 +76,18 @@ export default {
   mounted() {
     //cytoscape.use(dblclick);
     var self = this;
-    var cy = cytoscape({
+    // 定义我们需要高亮的关键字
+    const myHighlightList = ["hello", "你好", "$aaa$"];
+    this.myCodeMirror = CodeMirror.fromTextArea(this.$refs["myCodeMirror"], {
+      lineNumbers: true, // 是否显示行数
+      mode: "application/x-cypher-query", // 使用什么模式 text/x-pgsql是sql   javascript等
+      showCursorWhenSelecting: true, // 当有选中的时候是否显示光标
+      extraKeys: { Ctrl: "autocomplete" }, // 自定义快捷键
+      lineWrapping: true
+    });
+
+    //var myCodeMirror = codemirror(document.body);
+    /* var cy = cytoscape({
       container: document.getElementById("cycontainner"),
       style: [
         {
@@ -130,7 +165,7 @@ export default {
       cy.nodes().on("mouseover", self.mouseover.bind(self, cy));
       cy.nodes().on("mouseout", self.mouseout.bind(self, cy));
     });
-    console.log(cy);
+    console.log(cy); */
   },
   methods: {
     changeColor(item) {
